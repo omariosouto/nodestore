@@ -2,7 +2,7 @@ const mongojs = require('mongojs'),
       config  = require('config'),
       debug   = require('debug')('livro_nodejs:db');
 
-function _connection() {
+_connection = () => {
   const username  = config.get('mongo.username'),
     password    = config.get('mongo.password'),
     server      = config.get('mongo.server'),

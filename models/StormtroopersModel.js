@@ -29,6 +29,6 @@ class StormtrooperModel {
 }
 
 
-module.exports = function(mongo) {
+module.exports = (mongo) => {
   return new StormtrooperModel(mongo);
 }

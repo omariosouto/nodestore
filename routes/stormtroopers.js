@@ -1,8 +1,8 @@
 const express = require('express'),
 	  router = express.Router();
 
-const mongo = require('../db/mongo');
-const StormtrooperModel = require('../models/StormtroopersModel')(mongo);
+const mongo                  = require('../db/mongo');
+const StormtrooperModel      = require('../models/StormtroopersModel')(mongo);
 const StormtrooperController = require('../controllers/StormtroopersController')(StormtrooperModel);
 
 router.get('/', StormtrooperController.getAll.bind(StormtrooperController));
