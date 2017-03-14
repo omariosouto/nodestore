@@ -1,34 +1,47 @@
-class StormtrooperModel {
-  constructor(mongo) {
-    this.mongo = mongo;
-  }
-
-  find (query, callback) {
-    this.mongo.collection('stormtroopers').find(query, callback);
-  }
-
-  findOne (_id, callback) {
-    const query = { _id: this.mongo.ObjectId(_id) };
-    this.mongo.collection('stormtroopers').findOne(query, callback);
+class StormtrooperDAO {
+  constructor(model) {
+    this.model = model;
   }
 
   create (data, callback) {
-    this.mongo.collection('stormtroopers').insert(data, callback);
+    const model = new this.model(data);
+    model.save((err, result) => {
+      callback(err, result);
+    });
+  }
+
+  find (query, callback) {
+    this.model.find(query).exec(callback);
+  }
+
+  findOne (_id, callback) {
+    const query = { _id: _id };
+    this.model.findOne(query).exec(callback);
   }
 
   update (_id, data,callback) {
-    const query = { _id: this.mongo.ObjectId(_id) };
-    this.mongo.collection('stormtroopers').update(query, data, callback);
+    const query = { _id: _id };
+    this.model.update(query, data).exec((err, result) => {
+      callback(err, result);
+    });
   }
 
   remove (_id, callback) {
-    const query = { _id: this.mongo.ObjectId(_id) };
-    this.mongo.collection('stormtroopers').remove(query, callback);
+    const query = { _id: _id };
+    this.model.remove(query).exec(() => {
+      callback(err, result);
+    });
   }
 
 }
 
 
-module.exports = (mongo) => {
-  return new StormtrooperModel(mongo);
+module.exports = (mongoose) => {
+  const Stormtrooper = mongoose.model('Stormtrooper', {
+    name: String,
+    nickname: String,
+    divisions: [String],
+    patent: String
+  });
+  return new StormtrooperDAO(Stormtrooper);
 }

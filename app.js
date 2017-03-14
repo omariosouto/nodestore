@@ -2,6 +2,8 @@ const express          = require('express'),
       path             = require('path'),
       methodOverride   = require('method-override'),
       bodyParser       = require('body-parser'),
+      passport         = require('passport'),
+      BasicStrategy    = require('passport-http').BasicStrategy,
       app              = express();
 
 // Server config
@@ -22,6 +24,17 @@ app.use((request, response, next) => {
     next();
   }
 });
+
+app.use(passport.initialize());
+passport.use(
+    new BasicStrategy((username, password, done) => {
+      if (username.valueOf() === 'rebels' && password.valueOf() === '1138') {
+        return done(null, true);
+      } else {
+        return done(null, false);
+      }
+    })
+);
 
 // Router
 app.use('/', require('./routes'));

@@ -15,11 +15,15 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "config": "^1.25.1",
     "debug": "^2.6.2",
     "express": "^4.15.2",
     "method-override": "^2.3.7",
-    "mongojs": "^2.4.0"
+    "mongojs": "^2.4.0",
+    "mongoose": "^4.9.0",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0"
   }
 }

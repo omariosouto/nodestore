@@ -1,4 +1,4 @@
-const mongojs = require('mongojs'),
+const mongoose = require('mongoose'),
       config  = require('config'),
       debug   = require('debug')('livro_nodejs:db');
 
@@ -10,13 +10,18 @@ _connection = () => {
         database    = config.get('mongo.database'),
         auth        = username ? `${username}:${password}@` : '';
 
-        return `mongodb://${auth}${server}:${port}/${database}`;
+  return `mongodb://${auth}${server}:${port}/${database}`;
 }
 
-const db = mongojs(_connection());
+mongoose.connect(_connection());
+const db = mongoose.connection;
 
 db.on('error', (err) => {
   debug(err);
 });
 
-module.exports = db;
+db.once('open', () => {
+  debug('connected to mongodb');
+});
+
+module.exports = mongoose;

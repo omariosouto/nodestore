@@ -1,58 +1,64 @@
-const debug = require('debug')('livro_nodejs:controller');
+const debug   = require('debug')('livro_nodejs:controller');
+const Promise = require('bluebird');
 
 class StormtrooperController {
   constructor(StormtrooperModel) {
-    this.model = StormtrooperModel;
+    this.model = Promise.promisifyAll(StormtrooperModel);
   }
 
-  getAll(request, response, next) {
-    this.model.find({}, (err, data) => {
-      if(err) {
-        return next(err);
-      }
-      response.json(data);
-    });
+  getAll (request, response, next) {
+    this.model.findAsync({})
+      .then((data) => {
+        response.json(data);
+      })
+      .catch(next);
   }
 
-  getById(request, response, next) {
+  getById (request, response, next) {
     const _id = request.params._id;
-    this.model.findOne(_id, (err, data) => {
-      if(err) {
-        return next(err);
-      }
-      response.json(data);
-    });
+    this.model.findOneAsync(_id)
+      .then(this._handleNotFound)
+      .then((data) => {
+        response.json(data);
+    })
+    .catch(next);
   }
 
-  create(request, response, next) {
+  create (request, response, next) {
     const body = request.body;
-    this.model.create(body, (err, data) => {
-      if(err) {
-        return next(err);
-      }
-      response.json(data);
-    });
+    this.model.createAsync(body)
+      .then((err, data) => {
+        response.json(data);
+      })
+    .catch(next);
   }
 
-  update(request, response, next) {
+  update (request, response, next) {
     const _id = request.params._id,
           body = request.body;
-    this.model.update(_id, body, (err, data) => {
-      if(err) {
-        return next(err);
-      }
-      response.json(data);
-    });
+    this.model.updateAsync(_id, body)
+      .then(function(err, data) {
+        response.json(data);
+      })
+    .catch(next);
   }
 
-  remove(request, response, next) {
+  remove (request, response, next) {
     const _id = request.params._id;
-    this.model.remove(_id, (err, data) => {
-      if(err) {
-        return next(err);
-      }
-      response.json(data);
-    });
+    this.model.removeAsync(_id)
+      .then((err, data) => {
+        response.json(data);
+      })
+    .catch(next);
+  }
+
+  _handleNotFound (data) {
+    if(!data) {
+      const err = new Error('Não Encontrado');
+      err.status = 404;
+      return next(err);
+    }
+    return data;
   }
 
 }
