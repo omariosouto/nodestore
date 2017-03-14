@@ -13,6 +13,7 @@ _connection = () => {
   return `mongodb://${auth}${server}:${port}/${database}`;
 }
 
+mongoose.Promise = global.Promise;
 mongoose.connect(_connection());
 const db = mongoose.connection;
 

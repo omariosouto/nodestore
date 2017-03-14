@@ -20,8 +20,8 @@ class StormtrooperController {
       .then(this._handleNotFound)
       .then((data) => {
         response.json(data);
-    })
-    .catch(next);
+      })
+      .catch(next);
   }
 
   create (request, response, next) {
@@ -54,9 +54,9 @@ class StormtrooperController {
 
   _handleNotFound (data) {
     if(!data) {
-      const err = new Error('Não Encontrado');
+      var err = new Error('Não encontrado.');
       err.status = 404;
-      return next(err);
+      throw err;
     }
     return data;
   }
