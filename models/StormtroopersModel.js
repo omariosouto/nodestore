@@ -20,7 +20,7 @@ class StormtrooperDAO {
   }
 
   update (_id, data,callback) {
-    const query = { _id: _id };
+    const query = { _id : _id };
     this.model.update(query, data).exec((err, result) => {
       callback(err, result);
     });
@@ -28,7 +28,7 @@ class StormtrooperDAO {
 
   remove (_id, callback) {
     const query = { _id: _id };
-    this.model.remove(query).exec(() => {
+    this.model.remove(query).exec((err, result) => {
       callback(err, result);
     });
   }
